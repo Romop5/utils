@@ -4,3 +4,5 @@ main: args.o
 args.o: args.cpp args.h
 	g++ $(CXXFLAGS) -o args.o -c args.cpp
 
+clean:
+	rm -f main *.o

@@ -11,8 +11,8 @@ int main(int argc, char** argv)
 	Arguments arg;
 	// expected fixed arguments first in CMD
 	arg.first(Arguments::FIXED);
-	arg.addFixed("hostname","(\\S*)|(\\S*:\\S*)");
-	arg.addFixed("channels","(\\S*,)*(\\S*)");
+	arg.addFixed("hostname","([^: ]+)|([^: ]+:\\d+)");
+	arg.addFixed("channels","([#&][^, \07]+,)*([#&][^, \07]+)");
 	arg.addOpt("keywords","l");
 	arg.addOpt("keywords","s");
 	arg.addLongOpt("help","help","h",Arguments::NO_PARAM);
@@ -26,6 +26,11 @@ int main(int argc, char** argv)
 		exit(1);
 	}
 
+	if(arg.hasArgument("help"))
+	{
+		help();
+		exit(0);
+	}
 	std::cout << arg["hostname"] << " for " << arg["channels"] << std::endl;
 
 	auto map = arg.getMap();

@@ -1,4 +1,5 @@
 #include "args.h"
+#include <regex>
 #include <iostream>
 Arguments::Arguments()
 {
@@ -29,6 +30,9 @@ void Arguments::addLongOpt(std::string name, std::string key, std::string shortK
 
 int Arguments::parse(int argc, char** argv)
 {
+	for(int i = 0; i < argc; ++i)
+		std::cout << argv[i] << std::endl;
+
 	// Skip program name
 	char ** argumentPointer = argv+1;
 	
@@ -71,6 +75,8 @@ int Arguments::parse(int argc, char** argv)
 				{
 
 					char* omitMinus = (*argumentPointer)+1;
+					if((*argumentPointer)[1] == '-')
+						omitMinus = (*argumentPointer)+2;
 					char* param = *(argumentPointer+1);
 					if(hasOption(omitMinus))
 					{
@@ -83,6 +89,7 @@ int Arguments::parse(int argc, char** argv)
 								errorMessage = std::string("Expected param for option -")+omitMinus;
 								return ARGUMENT_INVALID_FORMAT;
 							}
+
 							*val = param;
 							++argumentPointer;
 						}
@@ -129,8 +136,11 @@ int Arguments::parse(int argc, char** argv)
 
 bool Arguments::hasFormat(std::string format, std::string testedWord)
 {
+	std::cout << "Comparing " << format << " and " << testedWord << std::endl;
 	// TODO:compare
-	return true;
+	std::regex re = std::regex(format);
+	std::smatch result;
+	return std::regex_match(testedWord,result, re);
 }
 
 
@@ -162,4 +172,18 @@ std::string Arguments::getOptionName(std::string opt)
 std::string Arguments::operator[](std::string argument)
 {
 	return this->arguments[argument];
+}
+
+
+bool Arguments::hasArgument(std::string name)
+{
+
+	auto it = this->arguments.find(name);
+	return (it != this->arguments.end());
+}
+
+
+bool Arguments::allowRedefinition(bool allow)
+{
+	this->isRedefinitionAllowed = allow;
 }

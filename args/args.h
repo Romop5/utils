@@ -35,6 +35,12 @@ class Arguments
 	int parse(int argc, char** argv);
 
 
+	// Has user entered any argument with name 'name'
+	bool hasArgument(std::string name);
+
+	bool allowRedefinition(bool allow);
+
+
 	// Returns value of argument, specified with name 'arg'
 	std::string operator[](const std::string arg);
 
@@ -61,4 +67,6 @@ class Arguments
 	std::string getOptionName(std::string opt);
 
 	std::string errorMessage;
+
+	bool isRedefinitionAllowed;
 };
