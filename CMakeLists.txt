@@ -6,6 +6,6 @@ add_library(utilslib INTERFACE )
 target_include_directories(utilslib INTERFACE src)
 
 if(UTILSLIB_UNIT)
-    add_executable(unittests unittests/callbacks.cpp)
-    target_link_libraries(unittests utilslib)
+    enable_testing()
+    add_subdirectory(unittests)
 endif()

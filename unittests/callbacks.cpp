@@ -1,8 +1,10 @@
+#include "catch2/catch.hpp"
+
 #include <utilslib/callbacks.hpp>
 #include <cassert>
 #include <iostream>
 
-int main()
+TEST_CASE("Trying to create a simple register callback")
 {
     std::cout << "Hello from the other side :)" << std::endl;
     utilslib::Callbacks<std::function<void(int)>> callbacks;
@@ -15,5 +17,4 @@ int main()
     {
         handler(20);
     }
-    return 0;
 }
