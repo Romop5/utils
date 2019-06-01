@@ -1,4 +1,4 @@
-#include <utilslib/callbacks/callbacks.hpp>
+#include <utilslib/callbacks.hpp>
 #include <cassert>
 #include <iostream>
 
