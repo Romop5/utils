@@ -5,7 +5,7 @@
 int main()
 {
     std::cout << "Hello from the other side :)" << std::endl;
-    Callbacks<std::function<void(int)>> callbacks;
+    utilslib::Callbacks<std::function<void(int)>> callbacks;
 
     std::function<void(int)> handler = [](int a)->void { std::cout << "WTF " << a << std::endl;};
     // 1. Create callback

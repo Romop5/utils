@@ -3,6 +3,7 @@
 #include <functional>
 #include <vector>
 
+namespace utilslib{
 /// @brief Function-generic callback register mechanism
 ///
 /// Following class enables to create a function-indepedent, yet type safe
@@ -38,4 +39,5 @@ class Callbacks
             m_callbacks.clear();
         }
 };
+} // utilslib namespace
 #endif
