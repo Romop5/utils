@@ -8,11 +8,11 @@ const std::string DEFAULT_LOG_FILENAME = "default_log.txt";
 
 enum class LOG_STATUS
 {
-    ALL,
-    DEBUG,
-    INFO,
-    ERROR,
-    NONE
+    LOG_ALL,
+    LOG_DEBUG,
+    LOG_INFO,
+    LOG_ERROR,
+    LOG_NONE
 };
 
 /*
@@ -38,7 +38,7 @@ class LoggerStream
     }
     std::ofstream& operator<<(const std::string rest)
     {
-        m_stream << std::string(m_streamBanner) << rest;
+        m_stream << std::string(m_streamBanner).c_str() << rest.c_str();
         return m_stream;
     }
         
@@ -58,7 +58,7 @@ private:
     LOG_STATUS m_currentVerbosityLevel;
     std::ofstream m_outputFile;
     std::ofstream m_emptyStream;
-    Logger(): m_currentVerbosityLevel(LOG_STATUS::ALL) {}
+    Logger(): m_currentVerbosityLevel(LOG_STATUS::LOG_ALL) {}
 
 public:
     static Logger* getLogger()
@@ -70,18 +70,18 @@ public:
         return logger;
     }
 
-    static LoggerStream getDebug() { return getLogger()->getStreamAs(LOG_STATUS::DEBUG); } 
-    static LoggerStream getInfo() { return getLogger()->getStreamAs(LOG_STATUS::INFO); } 
-    static LoggerStream getError() { return getLogger()->getStreamAs(LOG_STATUS::ERROR); } 
+    static LoggerStream getDebug() { return getLogger()->getStreamAs(LOG_STATUS::LOG_DEBUG); } 
+    static LoggerStream getInfo() { return getLogger()->getStreamAs(LOG_STATUS::LOG_INFO); } 
+    static LoggerStream getError() { return getLogger()->getStreamAs(LOG_STATUS::LOG_ERROR); } 
 
     LoggerStream getStreamAs(LOG_STATUS status)
     {
         std::string banner = "";
         switch(status)
         {
-            case LOG_STATUS::DEBUG: banner = "DEBUG"; break;
-            case LOG_STATUS::INFO: banner = "INFO"; break;
-            case LOG_STATUS::ERROR: banner = "ERROR"; break;
+            case LOG_STATUS::LOG_DEBUG: banner = "DEBUG"; break;
+            case LOG_STATUS::LOG_INFO: banner = "INFO"; break;
+            case LOG_STATUS::LOG_ERROR: banner = "ERROR"; break;
         }
         return LoggerStream(status >= m_currentVerbosityLevel ? m_outputFile : m_emptyStream, banner);
     }
