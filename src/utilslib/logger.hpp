@@ -1,5 +1,5 @@
-#ifndef C_LOG_HPP
-#define C_LOG_HPP
+#ifndef UTILSLIB_LOGGER_HPP
+#define UTILSLIB_LOGGER_HPP
 #include <fstream>
 #include <streambuf>
 
