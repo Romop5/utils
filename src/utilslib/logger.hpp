@@ -15,6 +15,11 @@ enum class LOG_STATUS
     NONE
 };
 
+/*
+ * @Overrides ofstream serialization to provide support for adding prefix banner
+ *
+ * Note that operator<< adds banner in the beginning of the stream.
+ */
 class LoggerStream
 {
     private:
@@ -39,6 +44,15 @@ class LoggerStream
         
 };
 
+/*
+ * @Simple logger class for storing notes into output file
+ *
+ * The class is based on singleton anti-patter. A single instance of logger is
+ * created for the whole .exe file. Path can be set using 'openAs()' method.
+ * Supports:
+ * - prefix banner (e.g. [INFO])
+ * - setting verbosity on-the-fly (setVerbosity()), @see LOG_STATUS
+ */
 class Logger {
 private:
     LOG_STATUS m_currentVerbosityLevel;
@@ -72,7 +86,7 @@ public:
         return LoggerStream(status >= m_currentVerbosityLevel ? m_outputFile : m_emptyStream, banner);
     }
 
-    void openAs(const std::string filename) { m_outputFile.open(filename); }
+    void openAs(const std::string filename) { m_outputFile.close(); m_outputFile.open(filename, std::ofstream::trunc); }
     void setVerbosity(LOG_STATUS newLevel) { this->m_currentVerbosityLevel = newLevel;}
 };
 }
