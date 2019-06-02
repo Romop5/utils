@@ -6,7 +6,7 @@
 
 TEST_CASE("A simple logger API test")
 {
-    auto logger = utilslib::Logger::getLogger();
+/*    auto logger = utilslib::Logger::getLogger();
     REQUIRE(logger != NULL);
 
     logger->openAs("test.output");
@@ -22,5 +22,11 @@ TEST_CASE("A simple logger API test")
     // Compare strings
     std::cout << content << " vs " << "Ehlo" << std::endl; 
     REQUIRE(content == "Ehlo");
+*/
+    auto logger = utilslib::Logger::getLogger();
+    logger->openAs("test.output");
+    logger->setVerbosity(utilslib::LOG_STATUS::ALL);
+    logger->getDebug() << "Hello from the other side" << std::endl;
+    logger->getInfo() << "Hello from the other side" << std::endl;
 
 }

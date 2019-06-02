@@ -6,28 +6,34 @@
 namespace utilslib {
 const std::string DEFAULT_LOG_FILENAME = "default_log.txt";
 
-enum LOG_STATUS
+enum class LOG_STATUS
 {
+    ALL,
     DEBUG,
     INFO,
-    ERROR
+    ERROR,
+    NONE
 };
 
 class LoggerStream
 {
     private:
-    std::ofstream m_stream;
+    std::ofstream& m_stream;
     std::string m_streamBanner;
 
     public:
-    LoggerStream(std::ofstream streamHandle, const std::string& banner): m_streamBanner(banner), m_stream(streamHandle) {}
+    LoggerStream(std::ofstream& streamHandle, std::string banner): m_stream(streamHandle), m_streamBanner(banner) 
+    {
+        if(!banner.empty())
+            this->m_streamBanner = "["+banner+"] ";
+    }
     std::ofstream& getStream() 
     {
         return m_stream;
     }
     std::ofstream& operator<<(const std::string rest)
     {
-        m_stream << std::string("[WTF] ") << rest;
+        m_stream << std::string(m_streamBanner) << rest;
         return m_stream;
     }
         
@@ -35,9 +41,10 @@ class LoggerStream
 
 class Logger {
 private:
-
+    LOG_STATUS m_currentVerbosityLevel;
     std::ofstream m_outputFile;
-    Logger() {}
+    std::ofstream m_emptyStream;
+    Logger(): m_currentVerbosityLevel(LOG_STATUS::ALL) {}
 
 public:
     static Logger* getLogger()
@@ -49,19 +56,24 @@ public:
         return logger;
     }
 
-    static LoggerStream& asDebug() { return getLogger()->m_outputStream; } const
+    static LoggerStream getDebug() { return getLogger()->getStreamAs(LOG_STATUS::DEBUG); } 
+    static LoggerStream getInfo() { return getLogger()->getStreamAs(LOG_STATUS::INFO); } 
+    static LoggerStream getError() { return getLogger()->getStreamAs(LOG_STATUS::ERROR); } 
 
-    LoggerStream& getStreamAs(LOG_STATUS status)
+    LoggerStream getStreamAs(LOG_STATUS status)
     {
+        std::string banner = "";
         switch(status)
         {
-            case DEBUG: return LoggerStream(m_outputStream, "DEBUG"):
-            case INFO: return LoggerStream(m_outputStream, "INFO"):
-            case ERROR: return LoggerStream(m_outputStream, "ERROR"):
+            case LOG_STATUS::DEBUG: banner = "DEBUG"; break;
+            case LOG_STATUS::INFO: banner = "INFO"; break;
+            case LOG_STATUS::ERROR: banner = "ERROR"; break;
         }
+        return LoggerStream(status >= m_currentVerbosityLevel ? m_outputFile : m_emptyStream, banner);
     }
 
-    void openAs(const std::string filename) { m_outputStream.getStream().open(filename); }
+    void openAs(const std::string filename) { m_outputFile.open(filename); }
+    void setVerbosity(LOG_STATUS newLevel) { this->m_currentVerbosityLevel = newLevel;}
 };
 }
 #endif
