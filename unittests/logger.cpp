@@ -41,7 +41,7 @@ TEST_CASE("Test verbosity - NONE")
     REQUIRE(logger != NULL);
 
     logger->openAs("test.output");
-    logger->setVerbosity(utilslib::LOG_STATUS::NONE);
+    logger->setVerbosity(utilslib::LOG_STATUS::LOG_NONE);
     logger->getDebug() << "Ehlo" << std::endl;
 
     std::ifstream file;
@@ -63,7 +63,7 @@ TEST_CASE("Test verbosity - INFO")
     REQUIRE(logger != NULL);
 
     logger->openAs("test.output");
-    logger->setVerbosity(utilslib::LOG_STATUS::INFO);
+    logger->setVerbosity(utilslib::LOG_STATUS::LOG_INFO);
     logger->getDebug() << "Ehlo" << std::endl;
 
     std::ifstream file;
