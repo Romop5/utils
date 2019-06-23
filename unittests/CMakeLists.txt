@@ -4,6 +4,8 @@ add_subdirectory(Catch2)
 add_executable(unittests
     callbacks.cpp
     logger.cpp
+    lookuptable.cpp
+    register.cpp
     main.cpp
     )
 
